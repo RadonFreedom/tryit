@@ -15,13 +15,12 @@
         <dependency>
             <groupId>fre.shown</groupId>
             <artifactId>tryit-dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>5.1.3.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

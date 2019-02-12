@@ -16,20 +16,19 @@
         <dependency>
             <groupId>fre.shown</groupId>
             <artifactId>tryit-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>fre.shown</groupId>
             <artifactId>tryit-service</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>5.1.3.RELEASE</version>
         </dependency>
 
 
@@ -37,7 +36,6 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
-            <version>9.0.14</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
