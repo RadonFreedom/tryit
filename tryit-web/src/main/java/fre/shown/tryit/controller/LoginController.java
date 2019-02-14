@@ -1,6 +1,5 @@
 package fre.shown.tryit.controller;
 
-import fre.shown.tryit.pojo.UserDO;
 import fre.shown.tryit.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +40,7 @@ public class LoginController {
             return "redirect:login";
         } else {
             //登陆成功，跳转到主页面
-            return "userpage";
+            return "redirect:userpage";
         }
     }
 }
