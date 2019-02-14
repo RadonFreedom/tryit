@@ -11,6 +11,9 @@
 
     <artifactId>tryit-web</artifactId>
     <packaging>war</packaging>
+    <build>
+        <finalName>tryit</finalName>
+    </build>
 
     <dependencies>
         <dependency>

@@ -12,6 +12,13 @@
     <artifactId>tryit-service</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>fre.shown</groupId>
+            <artifactId>tryit-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>fre.shown</groupId>
             <artifactId>tryit-dao</artifactId>
