@@ -1,6 +1,7 @@
 package fre.shown.tryit.service;
 
 import fre.shown.tryit.config.ServiceConfig;
+import fre.shown.tryit.pojo.UserDO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * {@link LoginService}的单元测试。
+ * {@link LoginServiceImpl}的单元测试。
  *
  * @author Radon Freedom
  * created at 2019.02.13 21:14
@@ -24,7 +25,15 @@ public class LoginServiceTest {
     private LoginService loginService;
 
     @Test
-    public void testloginSuccess() {
+    public void testLoginSuccess() {
         Assert.assertTrue(loginService.loginSuccess("radon", "king"));
+    }
+
+    @Test
+    public void testGetUserInfo() {
+        UserDO user = loginService.getUserInfo("radon");
+        System.out.println(user);
+        UserDO equalUser = new UserDO(1, "radon", null, "radon");
+        Assert.assertEquals(equalUser, user);
     }
 }

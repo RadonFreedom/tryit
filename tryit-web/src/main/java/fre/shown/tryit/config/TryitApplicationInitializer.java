@@ -1,6 +1,9 @@
 package fre.shown.tryit.config;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 /**
  * @author Radon Freedom
@@ -21,5 +24,10 @@ public class TryitApplicationInitializer extends AbstractAnnotationConfigDispatc
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[]{new CharacterEncodingFilter("UTF-8", true)};
     }
 }

@@ -1,11 +1,15 @@
 package fre.shown.tryit.controller;
 
+import fre.shown.tryit.pojo.LoginVO;
 import fre.shown.tryit.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Radon Freedom
@@ -29,18 +33,20 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
-    public String doLogin(String account, String password, Model model) {
 
+    @ResponseBody
+    @RequestMapping(value = "/doAjaxLogin", method = RequestMethod.POST)
+    public Object doAjaxLogin(@RequestParam String account, @RequestParam String password, HttpSession httpSession) {
 
-        if (!loginService.loginSuccess(account, password)) {
-            //登陆失败，跳转到登陆页面，提示错误信息
-            String errorMsg = "用户信息不存在或密码错误！";
-            model.addAttribute("errorMsg", errorMsg);
-            return "redirect:login";
+        LoginVO loginVO = new LoginVO();
+
+        if (loginService.loginSuccess(account, password)) {
+            loginVO.setSuccess(true);
+            httpSession.setAttribute("userInfo", loginService.getUserInfo(account));
         } else {
-            //登陆成功，跳转到主页面
-            return "redirect:userpage";
+            loginVO.setSuccess(false);
         }
+
+        return loginVO;
     }
 }

@@ -7,39 +7,44 @@
     <meta name="description" content="">
     <meta name="keys" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     <style>
 
     </style>
+    <title>用户登录 tryit</title>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <div><a class="navbar-brand" href="index.html" style="font-size:32px;">众筹平台</a></div>
+            <div><a class="navbar-brand" href="index" style="font-size:22px;">tryit 用户管理系统</a></div>
         </div>
     </div>
 </nav>
 
 <div class="container">
-
-    <form id="loginForm" action="doLogin" method="post" class="form-signin" role="form">
-        <h2 class="form-signin-heading"><i class="glyphicon glyphicon-user"></i> 用户登录</h2>
+    <form id="loginForm" class="form-signin" role="form">
+        <h3 class="form-signin-heading"><i class="glyphicon glyphicon-user"></i>用户登录</h3>
         <div class="form-group has-success has-feedback">
+
+            <%--下面的两个input标签必须同时有相同的id（为了在JS中使用）和name（为了能构成报文中的键值对）属性--%>
             <input type="text" class="form-control" name="account" id="account" placeholder="请输入登录账号" autofocus>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <input type="password" class="form-control" name="password" id="password" placeholder="请输入登录密码" style="margin-top:10px;">
+            <input type="password" class="form-control" name="password" id="password" placeholder="请输入登录密码"
+                   style="margin-top:10px;">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <select class="form-control" >
-                <option value="member">会员</option>
-                <option value="user">管理</option>
-            </select>
+            <label>
+                <select class="form-control">
+                    <option value="member">用户</option>
+                    <option value="user">管理员</option>
+                </select>
+            </label>
         </div>
         <div class="checkbox">
             <label>
@@ -53,26 +58,48 @@
                 <a href="reg.html">我要注册</a>
             </label>
         </div>
-        <a class="btn btn-lg btn-success btn-block" onclick="dologin()" > 登录</a>
+        <a class="btn btn-lg btn-success btn-block" onclick="dologin()"> 登录</a>
     </form>
+
 </div>
-<script src="jquery/jquery-2.1.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/jquery/jquery-2.1.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/layer/layer.js"></script>
 <script>
     function dologin() {
         //字符串非空校验
         var account = $("#account").val();
         if (account === "") {
-             alert("用户账号不能为空，请输入");
-             return;
+            layer.msg("用户账号不能为空，请输入", {time: 1000, icon: 0, shift: 5});
+            return;
         }
         var password = $("#password").val();
         if (password === "") {
-            alert("登录密码不能为空，请输入");
+            layer.msg("登录密码不能为空，请输入", {time: 1000, icon: 0, shift: 5});
             return;
         }
+
+        var holder = null;
         //提交表单
-        $("#loginForm").submit();
+        $.ajax({
+            type: "POST",
+            url: "doAjaxLogin",
+            data: {
+                account: account,
+                password: password
+            },
+            beforeSend: function () {
+                holder = layer.msg("处理中", {icon: 16});
+            },
+            success: function (result) {
+                layer.close(holder);
+                if (result.success === true) {
+                    window.location.href = "admin";
+                } else {
+                    layer.msg("用户信息不存在或密码错误", {time: 1000, icon: 2, shift: 6});
+                }
+            }
+        });
     }
 </script>
 </body>

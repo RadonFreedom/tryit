@@ -1,6 +1,7 @@
 package fre.shown.tryit.service;
 
 import fre.shown.tryit.dao.UserDAO;
+import fre.shown.tryit.pojo.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public class LoginServiceImpl implements LoginService {
 
         String realPasswd = userDAO.getPasswordByAccount(account);
         return realPasswd != null && realPasswd.equals(password);
+    }
+
+    @Override
+    public UserDO getUserInfo(String account) {
+        return userDAO.getUserByAccount(account);
     }
 }

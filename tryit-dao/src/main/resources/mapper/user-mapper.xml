@@ -7,4 +7,19 @@
     <select id="getPasswordByAccount" resultType="String">
         select password from user where account = #{account};
     </select>
+
+    <!--UserDO getUserByAccount(String account);-->
+    <select id="getUserByAccount" resultType="fre.shown.tryit.pojo.UserDO">
+        select id, account, name from user where account = #{account};
+    </select>
+
+    <!--List<UserDO> getUsersAsList(Integer begin, Integer cnt);-->
+    <select id="getUsersAsList" resultType="fre.shown.tryit.pojo.UserDO">
+        select id, account, name from user order by id limit #{begin}, #{cnt};
+    </select>
+
+    <!--Integer getTotalUserCnt();-->
+    <select id="getTotalUserCnt" resultType="Integer">
+        select count(*) from user;
+    </select>
 </mapper>
