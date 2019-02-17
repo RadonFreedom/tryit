@@ -30,15 +30,15 @@ public class UserMaintainServiceTest {
     private UserMaintainService userMaintainService;
 
     /**
-     * {@link UserMaintainServiceImpl#getSpecifiedPageUserData(Integer, Integer)}的单元测试
+     * {@link UserMaintainServiceImpl#getSpecifiedPageUserData(Integer, Integer, String)}的单元测试
      */
     @Test
     public void testGetSpecifiedPageUserData(){
 
         List<UserDO> expectedList = new ArrayList<>();
-        Assert.assertEquals(expectedList, userMaintainService.getSpecifiedPageUserData(4, 2));
+        Assert.assertEquals(expectedList, userMaintainService.getSpecifiedPageUserData(2, 4, null));
         expectedList.add(new UserDO(1, "radon", null, "radon"));
         expectedList.add(new UserDO(2, "shawn", null, "shawn"));
-        Assert.assertEquals(expectedList, userMaintainService.getSpecifiedPageUserData(4, 1));
+        Assert.assertEquals(expectedList, userMaintainService.getSpecifiedPageUserData(1, 4, "n"));
     }
 }

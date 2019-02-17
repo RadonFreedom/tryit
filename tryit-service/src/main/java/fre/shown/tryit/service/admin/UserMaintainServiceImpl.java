@@ -23,15 +23,15 @@ public class UserMaintainServiceImpl implements UserMaintainService {
     }
 
     @Override
-    public List<UserDO> getSpecifiedPageUserData(Integer pageNum, Integer pageSize) {
+    public List<UserDO> getSpecifiedPageUserData(Integer pageNum, Integer pageSize, String queryText) {
 
         int begin = pageSize * (pageNum - 1);
-        return userDAO.getUsersAsList(begin, pageSize);
+        return userDAO.getUsersAsList(begin, pageSize, queryText);
     }
 
     @Override
-    public Integer getTotalPageCnt(Integer pageSize) {
-        Integer totalUserCnt = userDAO.getTotalUserCnt();
+    public Integer getTotalPageCnt(Integer pageSize, String queryText) {
+        Integer totalUserCnt = userDAO.getTotalUserCnt(queryText);
         Integer totalPageCnt = totalUserCnt / pageSize;
         if (totalUserCnt % pageSize != 0) {
             totalPageCnt++;

@@ -13,13 +13,24 @@
         select id, account, name from user where account = #{account};
     </select>
 
-    <!--List<UserDO> getUsersAsList(Integer begin, Integer cnt);-->
+    <!--List<UserDO> getUsersAsList(@Param("begin") Integer begin, @Param("cnt") Integer cnt, @Param("queryText") String queryText);-->
     <select id="getUsersAsList" resultType="fre.shown.tryit.pojo.UserDO">
-        select id, account, name from user order by id limit #{begin}, #{cnt};
+        select id, account, name from user
+        <where>
+            <if test="queryText != null">
+                account like  concat('%', #{queryText}, '%')
+            </if>
+        </where>
+        order by id limit #{begin}, #{cnt};
     </select>
 
-    <!--Integer getTotalUserCnt();-->
+    <!--Integer getTotalUserCnt(@Param("queryText") String queryText);-->
     <select id="getTotalUserCnt" resultType="Integer">
-        select count(*) from user;
+        select count(*) from user
+        <where>
+            <if test="queryText != null">
+                account like  concat('%', #{queryText}, '%')
+            </if>
+        </where>;
     </select>
 </mapper>

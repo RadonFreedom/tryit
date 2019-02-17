@@ -33,15 +33,17 @@ public interface UserDAO {
      *
      * @param begin 从第<B>begin</B>用户开始(exclusive)（按id升序排序）
      * @param cnt 返回的用户数目
+     * @param queryText 查询的文本
      * @return 返回从begin开始的数量为cnt个的用户List。
      *          如果剩余用户量不足，将返回所有剩余用户。
      *          如果begin之后（inclusive）没有用户，返回空List。
      */
-    List<UserDO> getUsersAsList(@Param("begin") Integer begin, @Param("cnt") Integer cnt);
+    List<UserDO> getUsersAsList(@Param("begin") Integer begin, @Param("cnt") Integer cnt, @Param("queryText") String queryText);
 
     /**
      * 返回user表总记录条数
+     * @param queryText 需要查询的文本
      * @return user表总记录条数
      */
-    Integer getTotalUserCnt();
+    Integer getTotalUserCnt(@Param("queryText") String queryText);
 }

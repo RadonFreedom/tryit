@@ -146,17 +146,18 @@
                         <div class="form-group has-feedback">
                             <div class="input-group">
                                 <div class="input-group-addon">查询条件</div>
-                                <input class="form-control has-success" type="text" placeholder="请输入查询条件">
+                                <input id="queryText" class="form-control has-success" type="text" placeholder="请输入查询条件">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询
+                        <button id="queryButton" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询
                         </button>
                     </form>
                     <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
                             class=" glyphicon glyphicon-remove"></i> 删除
                     </button>
                     <button type="button" class="btn btn-primary" style="float:right;"
-                            onclick="window.location.href='add.html'"><i class="glyphicon glyphicon-plus"></i> 新增
+                            onclick="window.location.href='userMaintain/addUser'">
+                        <i class="glyphicon glyphicon-plus"></i> 新增
                     </button>
                     <br>
                     <hr style="clear:both;">
@@ -209,6 +210,9 @@
         });
 
         pageQuery(1);
+        $("#queryButton").click(function(){
+            pageQuery(1);
+        });
     });
     $("tbody .btn-success").click(function () {
         window.location.href = "assignRole.html";
@@ -223,8 +227,9 @@
             type: "POST",
             url: "userMaintain/pageQuery",
             data: {
-                pageNum: pageNum,
-                pageSize: 2
+                pageNum : pageNum,
+                pageSize: 1,
+                queryText: $("#queryText").val()
             },
             beforeSend: function () {
                 holder = layer.msg("处理中", {icon: 16});

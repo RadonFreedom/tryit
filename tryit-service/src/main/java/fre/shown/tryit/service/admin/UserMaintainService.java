@@ -19,9 +19,17 @@ public interface UserMaintainService {
      *
      * @param pageSize 每页的数据行数
      * @param pageNum 第几页
+     * @param queryText 查询文本
      * @return 指定页的用户List
      */
-    List<UserDO> getSpecifiedPageUserData(Integer pageSize, Integer pageNum);
+    List<UserDO> getSpecifiedPageUserData(Integer pageSize, Integer pageNum, String queryText);
 
-    Integer getTotalPageCnt(Integer pageSize);
+    /**
+     * 根据查询文本和每页条目数返回总页数
+     *
+     * @param pageSize 每页条目数
+     * @param queryText 查询文本
+     * @return 根据查询文本和每页条目数返回总页数
+     */
+    Integer getTotalPageCnt(Integer pageSize, String queryText);
 }

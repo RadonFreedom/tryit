@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.List;
 
 /**
- * 在{@link fre.shown.tryit.controller.admin.UserMaintainController#pageQuery(Integer, Integer)}中使用的VO
+ * 在{@link fre.shown.tryit.controller.admin.UserMaintainController#pageQuery(Integer, Integer, String)}中使用的VO
  *
  * @author Radon Freedom
  * created at 2019.02.15 19:15

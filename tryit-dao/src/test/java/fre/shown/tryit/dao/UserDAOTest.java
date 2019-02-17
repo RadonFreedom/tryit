@@ -48,15 +48,27 @@ public class UserDAOTest {
     }
 
     /**
-     * Unit test for {@link UserDAO#getUsersAsList(Integer, Integer)}.
+     * Unit test for {@link UserDAO#getUsersAsList(Integer, Integer, String)}.
      */
     @Test
     public void testGetUsersAsList() {
 
         List<UserDO> expectedList = new ArrayList<>();
         expectedList.add(new UserDO(1, "radon", null, "radon"));
-        Assert.assertEquals(expectedList, userDAO.getUsersAsList(0, 1));
+        Assert.assertEquals(expectedList, userDAO.getUsersAsList(0, 1, "ra"));
         expectedList.add(new UserDO(2, "shawn", null, "shawn"));
-        Assert.assertEquals(expectedList, userDAO.getUsersAsList(0, 2));
+        Assert.assertEquals(expectedList, userDAO.getUsersAsList(0, 2, "n"));
+    }
+
+    /**
+     * Unit test for {@link UserDAO#getTotalUserCnt(String)}.
+     */
+    @Test
+    public void testGetTotalUserCnt() {
+
+        Integer expectedCnt = 1;
+        Assert.assertEquals(expectedCnt, userDAO.getTotalUserCnt("ra"));
+        expectedCnt = 2;
+        Assert.assertEquals(expectedCnt, userDAO.getTotalUserCnt(null));
     }
 }
