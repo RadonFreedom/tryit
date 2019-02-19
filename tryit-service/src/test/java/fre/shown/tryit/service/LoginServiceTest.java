@@ -33,7 +33,7 @@ public class LoginServiceTest {
     public void testGetUserInfo() {
         UserDO user = loginService.getUserInfo("radon");
         System.out.println(user);
-        UserDO equalUser = new UserDO(1, "radon", null, "radon");
+        UserDO equalUser = new UserDO(20, "radon", null, "radon", "2019-02-19 11:42:47");
         Assert.assertEquals(equalUser, user);
     }
 }

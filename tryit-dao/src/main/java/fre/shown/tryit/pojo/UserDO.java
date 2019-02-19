@@ -17,27 +17,17 @@ public class UserDO {
     private String account;
     private String password;
     private String name;
+    private String createTime;
 
     public UserDO() {
     }
 
-    public UserDO(Integer id, String account, String password, String name) {
+    public UserDO(Integer id, String account, String password, String name, String createTime) {
         this.id = id;
         this.account = account;
         this.password = password;
         this.name = name;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "UserDO{" +
-                "id=" + id +
-                ", account='" + account + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+        this.createTime = createTime;
     }
 
     @Override
@@ -57,6 +47,7 @@ public class UserDO {
                 .append(getAccount(), userDO.getAccount())
                 .append(getPassword(), userDO.getPassword())
                 .append(getName(), userDO.getName())
+                .append(getCreateTime(), userDO.getCreateTime())
                 .isEquals();
     }
 
@@ -67,7 +58,19 @@ public class UserDO {
                 .append(getAccount())
                 .append(getPassword())
                 .append(getName())
+                .append(getCreateTime())
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "UserDO{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", createTime='" + createTime + '\'' +
+                '}';
     }
 
     public Integer getId() {
@@ -100,5 +103,13 @@ public class UserDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

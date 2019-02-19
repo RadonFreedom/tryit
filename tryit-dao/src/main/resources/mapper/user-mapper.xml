@@ -10,12 +10,12 @@
 
     <!--UserDO getUserByAccount(String account);-->
     <select id="getUserByAccount" resultType="fre.shown.tryit.pojo.UserDO">
-        select id, account, name from user where account = #{account};
+        select id, account, name, create_time from user where account = #{account};
     </select>
 
     <!--List<UserDO> getUsersAsList(@Param("begin") Integer begin, @Param("cnt") Integer cnt, @Param("queryText") String queryText);-->
     <select id="getUsersAsList" resultType="fre.shown.tryit.pojo.UserDO">
-        select id, account, name from user
+        select id, account, name, create_time from user
         <where>
             <if test="queryText != null">
                 account like  concat('%', #{queryText}, '%')
@@ -33,4 +33,10 @@
             </if>
         </where>;
     </select>
+
+    <!--void addUser(UserDO userDO);-->
+    <insert id="addUser">
+        insert into user (account, password, name, create_time)
+        values (#{account}, #{password}, #{name}, #{createTime});
+    </insert>
 </mapper>

@@ -83,7 +83,7 @@
         //提交表单
         $.ajax({
             type: "POST",
-            url: "doAjaxLogin",
+            url: "doLogin",
             data: {
                 account: account,
                 password: password
@@ -93,7 +93,7 @@
             },
             success: function (result) {
                 layer.close(holder);
-                if (result.success === true) {
+                if (result === true) {
                     window.location.href = "admin";
                 } else {
                     layer.msg("用户信息不存在或密码错误", {time: 1000, icon: 2, shift: 6});

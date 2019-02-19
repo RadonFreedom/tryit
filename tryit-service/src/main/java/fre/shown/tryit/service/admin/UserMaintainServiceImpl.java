@@ -2,7 +2,9 @@ package fre.shown.tryit.service.admin;
 
 import fre.shown.tryit.dao.UserDAO;
 import fre.shown.tryit.pojo.UserDO;
+import fre.shown.tryit.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +39,18 @@ public class UserMaintainServiceImpl implements UserMaintainService {
             totalPageCnt++;
         }
         return totalPageCnt;
+    }
+
+    @Override
+    public Boolean addUser(UserDO userDO) {
+
+        try {
+            userDO.setCreateTime(DateUtils.getCurrentTime());
+            userDAO.addUser(userDO);
+        } catch (DataIntegrityViolationException e) {
+            return false;
+        }
+        return true;
     }
 }
 

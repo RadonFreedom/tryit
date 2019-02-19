@@ -37,8 +37,17 @@ public class UserMaintainServiceTest {
 
         List<UserDO> expectedList = new ArrayList<>();
         Assert.assertEquals(expectedList, userMaintainService.getSpecifiedPageUserData(2, 4, null));
-        expectedList.add(new UserDO(1, "radon", null, "radon"));
-        expectedList.add(new UserDO(2, "shawn", null, "shawn"));
+        expectedList.add(new UserDO(20, "radon", null, "radon", "2019-02-19 11:42:47"));
+        expectedList.add(new UserDO(21, "shawn", null, "shawn", "2019-02-19 11:43:09"));
         Assert.assertEquals(expectedList, userMaintainService.getSpecifiedPageUserData(1, 4, "n"));
     }
+//
+    /**
+     * {@link UserMaintainServiceImpl#addUser(UserDO)}的单元测试
+     */
+    @Test
+    public void testAddUser() {
+        Assert.assertEquals(true, userMaintainService.addUser(new UserDO(1, "radon", "king", "radon", null)));
+    }
+
 }

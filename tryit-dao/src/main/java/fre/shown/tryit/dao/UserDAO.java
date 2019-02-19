@@ -2,6 +2,7 @@ package fre.shown.tryit.dao;
 
 import fre.shown.tryit.pojo.UserDO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -46,4 +47,13 @@ public interface UserDAO {
      * @return user表总记录条数
      */
     Integer getTotalUserCnt(@Param("queryText") String queryText);
+
+
+    /**
+     * 新增用户，如果用户account已存在将抛出异常。
+     * 方法参数 {@code userDO} 的id属性无效，不会被使用。
+     * @param userDO 新增用户信息，不包括id（即便包括也不会被使用）
+     * @throws DataIntegrityViolationException 待插入用户的account已存在
+     */
+    void addUser(UserDO userDO);
 }

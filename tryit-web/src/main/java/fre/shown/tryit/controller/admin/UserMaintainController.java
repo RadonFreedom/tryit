@@ -1,5 +1,6 @@
 package fre.shown.tryit.controller.admin;
 
+import fre.shown.tryit.pojo.UserDO;
 import fre.shown.tryit.pojo.admin.PageQueryVO;
 import fre.shown.tryit.service.admin.UserMaintainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,12 @@ public class UserMaintainController {
     @RequestMapping("/admin/userMaintain/addUser")
     public String addUser() {
         return "/admin/userMaintain/addUser";
+    }
+
+    @ResponseBody
+    @RequestMapping("admin/userMaintain/doAddUser")
+    public Boolean doAddUser(UserDO userDO){
+
+        return userMaintainService.addUser(userDO);
     }
 }

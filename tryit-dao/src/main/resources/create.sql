@@ -7,3 +7,4 @@ create table user
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
+alter table user add column create_time char(19) not null;

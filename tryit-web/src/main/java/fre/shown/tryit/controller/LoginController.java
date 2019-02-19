@@ -1,6 +1,5 @@
 package fre.shown.tryit.controller;
 
-import fre.shown.tryit.pojo.LoginVO;
 import fre.shown.tryit.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,26 +26,26 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+    @RequestMapping("/")
+    public String root() {
+        return "login";
+    }
+
     @RequestMapping("/login")
     public String login() {
 
         return "login";
     }
 
-
     @ResponseBody
-    @RequestMapping(value = "/doAjaxLogin", method = RequestMethod.POST)
-    public Object doAjaxLogin(@RequestParam String account, @RequestParam String password, HttpSession httpSession) {
-
-        LoginVO loginVO = new LoginVO();
+    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
+    public Boolean doLogin(@RequestParam String account, @RequestParam String password, HttpSession httpSession) {
 
         if (loginService.loginSuccess(account, password)) {
-            loginVO.setSuccess(true);
             httpSession.setAttribute("userInfo", loginService.getUserInfo(account));
+            return true;
         } else {
-            loginVO.setSuccess(false);
+            return false;
         }
-
-        return loginVO;
     }
 }

@@ -146,10 +146,12 @@
                         <div class="form-group has-feedback">
                             <div class="input-group">
                                 <div class="input-group-addon">查询条件</div>
-                                <input id="queryText" class="form-control has-success" type="text" placeholder="请输入查询条件">
+                                <input id="queryText" class="form-control has-success" type="text"
+                                       placeholder="请输入查询条件">
                             </div>
                         </div>
-                        <button id="queryButton" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询
+                        <button id="queryButton" type="button" class="btn btn-warning"><i
+                                class="glyphicon glyphicon-search"></i> 查询
                         </button>
                     </form>
                     <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
@@ -166,10 +168,14 @@
                             <thead>
                             <tr>
                                 <th width="30">#</th>
-                                <th width="30"><input type="checkbox"></th>
+                                <th width="30">
+                                    <label>
+                                        <input type="checkbox">
+                                    </label>
+                                </th>
                                 <th>账号</th>
-                                <th>名称</th>
-                                <th>邮箱地址</th>
+                                <th>用户名</th>
+                                <th>创建时间</th>
                                 <th width="100">操作</th>
                             </tr>
                             </thead>
@@ -182,7 +188,6 @@
                                     </ul>
                                 </td>
                             </tr>
-
                             </tfoot>
                         </table>
                     </div>
@@ -210,7 +215,7 @@
         });
 
         pageQuery(1);
-        $("#queryButton").click(function(){
+        $("#queryButton").click(function () {
             pageQuery(1);
         });
     });
@@ -227,8 +232,8 @@
             type: "POST",
             url: "userMaintain/pageQuery",
             data: {
-                pageNum : pageNum,
-                pageSize: 1,
+                pageNum: pageNum,
+                pageSize: 4,
                 queryText: $("#queryText").val()
             },
             beforeSend: function () {
@@ -250,7 +255,7 @@
                     userDataHtml += '  <td><input type="checkbox" name="userid" value="' + user.id + '"></td>';
                     userDataHtml += '  <td>' + user.account + '</td>';
                     userDataHtml += '  <td>' + user.name + '</td>';
-                    userDataHtml += '  <td></td>';
+                    userDataHtml += '  <td>' + user.createTime + '</td>';
                     userDataHtml += '  <td>';
                     userDataHtml += '     <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
                     userDataHtml += '     <button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';

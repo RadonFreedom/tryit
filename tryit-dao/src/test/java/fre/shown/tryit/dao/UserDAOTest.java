@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,9 +44,10 @@ public class UserDAOTest {
     public void testGetUserByAccount() {
 
         UserDO user = userDAO.getUserByAccount("radon");
-        UserDO expectedUser = new UserDO(1, "radon", null, "radon");
+        UserDO expectedUser = new UserDO(20, "radon", null, "radon", "2019-02-19 11:42:47");
         Assert.assertEquals(expectedUser, user);
     }
+
 
     /**
      * Unit test for {@link UserDAO#getUsersAsList(Integer, Integer, String)}.
@@ -54,11 +56,10 @@ public class UserDAOTest {
     public void testGetUsersAsList() {
 
         List<UserDO> expectedList = new ArrayList<>();
-        expectedList.add(new UserDO(1, "radon", null, "radon"));
+        expectedList.add(new UserDO(20, "radon", null, "radon", "2019-02-19 11:42:47"));
         Assert.assertEquals(expectedList, userDAO.getUsersAsList(0, 1, "ra"));
-        expectedList.add(new UserDO(2, "shawn", null, "shawn"));
-        Assert.assertEquals(expectedList, userDAO.getUsersAsList(0, 2, "n"));
     }
+
 
     /**
      * Unit test for {@link UserDAO#getTotalUserCnt(String)}.
@@ -70,5 +71,17 @@ public class UserDAOTest {
         Assert.assertEquals(expectedCnt, userDAO.getTotalUserCnt("ra"));
         expectedCnt = 2;
         Assert.assertEquals(expectedCnt, userDAO.getTotalUserCnt(null));
+    }
+
+    /**
+     * Unit test for {@link UserDAO#addUser(UserDO)}.
+     */
+    @Test
+    public void testAddUser() {
+        try {
+            userDAO.addUser(new UserDO(1, "radon", null, "radon", ""));
+        } catch (Exception e) {
+            Assert.assertEquals(e.getClass(), DataIntegrityViolationException.class);
+        }
     }
 }

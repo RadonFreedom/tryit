@@ -61,13 +61,13 @@
             <div class="tree">
                 <ul style="padding-left:0px;" class="list-group">
                     <li class="list-group-item tree-closed" >
-                        <a href="main.html"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a>
+                        <a href="${pageContext.request.contextPath}/admin"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a>
                     </li>
                     <li class="list-group-item">
                         <span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
                         <ul style="margin-top:10px;">
                             <li style="height:30px;">
-                                <a href="user.html" style="color:red;"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+                                <a href="${pageContext.request.contextPath}/admin/userMaintain" style="color:red;"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
                             </li>
                             <li style="height:30px;">
                                 <a href="role.html"><i class="glyphicon glyphicon-certificate"></i> 角色维护</a>
@@ -134,19 +134,18 @@
                 <div class="panel-body">
                     <form role="form">
                         <div class="form-group">
-                            <label for="exampleInputPassword1">登陆账号</label>
-                            <input type="text" class="form-control" id="loginacct" placeholder="请输入登陆账号">
+                            <label>登陆账号</label>
+                            <input type="text" class="form-control" id="account" placeholder="请输入登陆账号">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">用户名称</label>
-                            <input type="text" class="form-control" id="username" placeholder="请输入用户名称">
+                            <label>用户名称</label>
+                            <input type="text" class="form-control" id="name" placeholder="请输入用户名称">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">邮箱地址</label>
-                            <input type="email" class="form-control" id="email" placeholder="请输入邮箱地址">
-                            <p class="help-block label label-warning">请输入合法的邮箱地址, 格式为： xxxx@xxxx.com</p>
+                            <label>密码</label>
+                            <input type="password" class="form-control" id="password" placeholder="请输入用户名称">
                         </div>
-                        <button id="insertBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+                        <button id="addUserButton" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                         <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
                     </form>
                 </div>
@@ -161,25 +160,10 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">帮助</h4>
             </div>
-            <div class="modal-body">
-                <div class="bs-callout bs-callout-info">
-                    <h4>测试标题1</h4>
-                    <p>测试内容1，测试内容1，测试内容1，测试内容1，测试内容1，测试内容1</p>
-                </div>
-                <div class="bs-callout bs-callout-info">
-                    <h4>测试标题2</h4>
-                    <p>测试内容2，测试内容2，测试内容2，测试内容2，测试内容2，测试内容2</p>
-                </div>
-            </div>
-            <!--
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-            -->
         </div>
     </div>
 </div>
+
 <script src="${pageContext.request.contextPath}/jquery/jquery-2.1.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/docs.min.js"></script>
@@ -197,40 +181,46 @@
             }
         });
 
-        $("#insertBtn").click(function(){
-            var loginacct = $("#loginacct").val();
-            if ( loginacct == "" ) {
-                layer.msg("登录账号不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
+        $("#addUserButton").click(function () {
+            var holder = null;
 
-                });
+            var account = $("#account").val();
+            if (account === "") {
+                layer.msg("用户账号不能为空，请输入", {time: 1000, icon: 0, shift: 5});
+                return;
+            }
+            var name = $("#name").val();
+            if (name === "") {
+                layer.msg("用户名不能为空，请输入", {time: 1000, icon: 0, shift: 5});
+                return;
+            }
+            var password = $("#password").val();
+            if (password === "") {
+                layer.msg("登录密码不能为空，请输入", {time: 1000, icon: 0, shift: 5});
                 return;
             }
 
-            var loadingIndex = null;
             $.ajax({
-                type : "POST",
-                url  : "${pageContext.request.contextPath}/user/insert",
-                data : {
-                    "loginacct" : loginacct,
-                    "username"  : $("#username").val(),
-                    "email"     : $("#email").val()
+                type: "POST",
+                url : "doAddUser",
+                data:{
+                    account: account,
+                    name   : name,
+                    password:password
                 },
-                beforeSend : function() {
-                    loadingIndex = layer.msg('处理中', {icon: 16});
+                beforeSend: function () {
+                    holder = layer.msg("处理中", {icon: 16});
                 },
-                success : function(result) {
-                    layer.close(loadingIndex);
-                    if ( result.success ) {
-                        layer.msg("用户信息保存成功", {time:1000, icon:6}, function(){
-                            window.location.href = "${pageContext.request.contextPath}/user/index";
-                        });
+                success: function (result) {
+                    layer.close(holder);
+                    if (result === true) {
+                        layer.msg("新增用户成功", {time: 1000, icon: 1, shift: 5});
+                        window.location.href="${pageContext.request.contextPath}/admin/userMaintain";
                     } else {
-                        layer.msg("用户信息保存失败，请重新操作", {time:2000, icon:5, shift:6}, function(){
-
-                        });
+                        layer.msg("用户账户名已存在", {time: 1000, icon: 2, shift: 6});
                     }
                 }
-            });
+            })
         });
     });
 </script>
