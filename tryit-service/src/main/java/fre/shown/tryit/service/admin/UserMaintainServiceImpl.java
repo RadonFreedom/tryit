@@ -17,6 +17,9 @@ import java.util.List;
 @Service
 public class UserMaintainServiceImpl implements UserMaintainService {
 
+    private static final Integer DEFAULT_PAGE_NUM = 1;
+    private static final Integer DEFAULT_PAGE_SIZE = 16;
+
     private final UserDAO userDAO;
 
     @Autowired
@@ -26,6 +29,16 @@ public class UserMaintainServiceImpl implements UserMaintainService {
 
     @Override
     public List<UserDO> getSpecifiedPageUserData(Integer pageNum, Integer pageSize, String queryText) {
+
+        if (pageNum == null) {
+            pageNum = DEFAULT_PAGE_NUM;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        if ("".equals(queryText)) {
+            queryText = null;
+        }
 
         int begin = pageSize * (pageNum - 1);
         return userDAO.getUsersAsList(begin, pageSize, queryText);
@@ -48,6 +61,23 @@ public class UserMaintainServiceImpl implements UserMaintainService {
             userDO.setCreateTime(DateUtils.getCurrentTime());
             userDAO.addUser(userDO);
         } catch (DataIntegrityViolationException e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean updateUserByAccount(UserDO userDO) {
+        return userDAO.updateUserByAccount(userDO);
+    }
+
+    @Override
+    public Boolean deleteUserByAccount(String account) {
+
+        try {
+            userDAO.deleteUserByAccount(account);
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;

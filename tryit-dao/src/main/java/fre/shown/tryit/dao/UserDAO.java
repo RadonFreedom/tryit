@@ -56,4 +56,18 @@ public interface UserDAO {
      * @throws DataIntegrityViolationException 待插入用户的account已存在
      */
     void addUser(UserDO userDO);
+
+    /**
+     * 据account确认user表需要更新的<B>唯一</B>条目，更新传入参数中的name和password属性
+     * @param userDO account属性不能为null，否则将抛出异常
+     * @return 如果用户account不存在返回false，否则返回true
+     */
+    Boolean updateUserByAccount(UserDO userDO);
+
+
+    /**
+     * 根据account确认user表需要删除的<B>唯一</B>条目
+     * @param account 不能为空，否则抛出异常。可以为不存在的值
+     */
+    void deleteUserByAccount(String account);
 }

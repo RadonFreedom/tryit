@@ -21,7 +21,7 @@
                 account like  concat('%', #{queryText}, '%')
             </if>
         </where>
-        order by id limit #{begin}, #{cnt};
+        order by create_time desc limit #{begin}, #{cnt};
     </select>
 
     <!--Integer getTotalUserCnt(@Param("queryText") String queryText);-->
@@ -39,4 +39,19 @@
         insert into user (account, password, name, create_time)
         values (#{account}, #{password}, #{name}, #{createTime});
     </insert>
+
+    <!--void updateUserByAccount(UserDO userDO);-->
+    <update id="updateUserByAccount">
+        update user
+        set name = #{name},
+            password = #{password}
+        where account = #{account};
+    </update>
+
+    <!--void deleteUserByAccount(String account);-->
+    <delete id="deleteUserByAccount">
+        delete
+        from user
+        where account = #{account};
+    </delete>
 </mapper>

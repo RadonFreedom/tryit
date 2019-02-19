@@ -84,4 +84,23 @@ public class UserDAOTest {
             Assert.assertEquals(e.getClass(), DataIntegrityViolationException.class);
         }
     }
+
+    /**
+     * Unit test for {@link UserDAO#updateUserByAccount(UserDO)}.
+     */
+    @Test
+    public void testUpdateUserByAccount() {
+        userDAO.updateUserByAccount(new UserDO(null, "radon", "king", "Radon", null));
+        UserDO result = userDAO.getUserByAccount("radon");
+        Assert.assertEquals("Radon", result.getName());
+        Assert.assertEquals("king", userDAO.getPasswordByAccount("radon"));
+    }
+
+    /**
+     * Unit test for {@link UserDAO#deleteUserByAccount(String)}.
+     */
+    @Test
+    public void testDeleteUserByAccount() {
+        userDAO.deleteUserByAccount("sadasd");
+    }
 }

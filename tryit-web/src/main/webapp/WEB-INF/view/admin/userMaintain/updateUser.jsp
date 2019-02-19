@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -10,18 +11,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font-awesome.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/doc.min.css">
     <style>
         .tree li {
             list-style-type: none;
             cursor: pointer;
-        }
-
-        table tbody tr:nth-child(odd) {
-            background: #F4F4F4;
-        }
-
-        table tbody td:nth-child(even) {
-            color: #C00;
         }
     </style>
     <title>用户维护 tryit</title>
@@ -137,62 +131,41 @@
             </div>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 数据列表</h3>
-                </div>
-                <div class="panel-body">
-                    <form class="form-inline" role="form" style="float:left;">
-                        <div class="form-group has-feedback">
-                            <div class="input-group">
-                                <div class="input-group-addon">查询条件</div>
-                                <input id="queryText" class="form-control has-success" type="text"
-                                       placeholder="请输入查询条件">
-                            </div>
-                        </div>
-                        <button id="queryButton" type="button" class="btn btn-warning"><i
-                                class="glyphicon glyphicon-search"></i> 查询
-                        </button>
-                    </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
-                            class=" glyphicon glyphicon-remove"></i> 删除
-                    </button>
-                    <button type="button" class="btn btn-primary" style="float:right;"
-                            onclick="window.location.href='userMaintain/addUser'">
-                        <i class="glyphicon glyphicon-plus"></i> 新增
-                    </button>
-                    <br>
-                    <hr style="clear:both;">
-                    <div class="table-responsive">
-                        <table class="table  table-bordered">
-                            <thead>
-                            <tr>
-                                <th width="30">#</th>
-                                <th width="30">
-                                    <label>
-                                        <input type="checkbox">
-                                    </label>
-                                </th>
-                                <th>账号</th>
-                                <th>用户名</th>
-                                <th>创建时间</th>
-                                <th width="100">操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="userData">
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="6" align="center">
-                                    <ul id="pageNums" class="pagination">
-                                    </ul>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
+            <ol class="breadcrumb">
+                <li><a href="${pageContext.request.contextPath}/admin">首页</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/userMaintain">数据列表</a></li>
+                <li class="active">修改</li>
+            </ol>
+            <div class="panel-body">
+                <form id="userDataForm" role="form">
+                    <div class="form-group">
+                        <label>用户名称</label>
+                        <input type="text" class="form-control" id="name" placeholder="请输入用户名称">
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" class="form-control" id="password" placeholder="请输入用户名称">
+                    </div>
+                    <button id="updateUserButton" type="button" class="btn btn-success"><i
+                            class="glyphicon glyphicon-plus"></i> 修改
+                    </button>
+                    <button id="resetButton" type="button" class="btn btn-danger" href=""><i class="glyphicon glyphicon-refresh"></i> 重置
+                    </button>
+                </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">帮助</h4>
+            </div>
+
         </div>
     </div>
 </div>
@@ -201,7 +174,8 @@
 <script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/docs.min.js"></script>
 <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
-<script>
+
+<script type="text/javascript">
     $(function () {
         $(".list-group-item").click(function () {
             if ($(this).find("ul")) {
@@ -214,102 +188,49 @@
             }
         });
 
-        pageQuery(1);
-        $("#queryButton").click(function () {
-            pageQuery(1);
+        $("#resetButton").click(function () {
+            $("#userDataForm")[0].reset();
         });
-    });
-    $("tbody .btn-success").click(function () {
-        window.location.href = "assignRole.html";
-    });
-    $("tbody .btn-primary").click(function () {
-        window.location.href = "edit.html";
-    });
 
-    function pageQuery(pageNum) {
-        var holder = null;
-        $.ajax({
-            type: "POST",
-            url: "userMaintain/pageQuery",
-            data: {
-                pageNum: pageNum,
-                pageSize: 4,
-                queryText: $("#queryText").val()
-            },
-            beforeSend: function () {
-                holder = layer.msg("处理中", {icon: 16});
-            },
-            success: function (result) {
-                layer.close(holder);
-                //局部刷新获得的页面数据
-                var userDataHtml = "";
-                var pageNumsHtml = "";
+        $("#updateUserButton").click(function () {
+            var holder = null;
 
-                var dataList = result.dataList;
-                var currentPage = result.currentPage;
-                var totalPageCnt = result.totalPageCnt;
+            var name = $("#name").val();
+            if (name === "") {
+                layer.msg("用户名不能为空，请输入", {time: 1000, icon: 0, shift: 5});
+                return;
+            }
+            var password = $("#password").val();
+            if (password === "") {
+                layer.msg("登录密码不能为空，请输入", {time: 1000, icon: 0, shift: 5});
+                return;
+            }
 
-                $.each(dataList, function (i, user) {
-                    userDataHtml += '<tr>';
-                    userDataHtml += '  <td>' + (i + 1) + '</td>';
-                    userDataHtml += '  <td><input type="checkbox" name="userid" value="' + user.id + '"></td>';
-                    userDataHtml += '  <td>' + user.account + '</td>';
-                    userDataHtml += '  <td>' + user.name + '</td>';
-                    userDataHtml += '  <td>' + user.createTime + '</td>';
-                    userDataHtml += '  <td>';
-                    userDataHtml += '     <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-                    userDataHtml += '     <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href=\'userMaintain/updateUser?account='+ user.account +'\'"><i class=" glyphicon glyphicon-pencil"></i></button>';
-                    userDataHtml += '	  <button type="button" class="btn btn-danger btn-xs" onclick=deleteUser("'+ user.account +'")><i class=" glyphicon glyphicon-remove"></i></button>';
-                    userDataHtml += '  </td>';
-                    userDataHtml += '</tr>';
-                });
-
-                if (currentPage > 1) {
-                    pageNumsHtml += '<li><a onclick="pageQuery(' + (currentPage - 1) + ')">上一页</a></li>';
-                }
-
-                for (var i = 1; i <= totalPageCnt; i++) {
-                    if (i === currentPage) {
-                        pageNumsHtml += '<li class="active"><a  href="#">' + i + '</a></li>';
+            $.ajax({
+                type: "POST",
+                url: "doUpdateUser",
+                data: {
+                    account: "${account}",
+                    name: name,
+                    password: password
+                },
+                beforeSend: function () {
+                    holder = layer.msg("处理中", {icon: 16});
+                },
+                success: function (result) {
+                    layer.close(holder);
+                    if (result === true) {
+                        layer.msg("修改用户成功", {time: 1000, icon: 1, shift: 5});
+                        window.location.href = "${pageContext.request.contextPath}/admin/userMaintain";
                     } else {
-                        pageNumsHtml += '<li ><a onclick="pageQuery(' + i + ')">' + i + '</a></li>';
+                        layer.msg("用户账户不存在", {time: 1000, icon: 2, shift: 6});
                     }
                 }
-
-                if (currentPage < totalPageCnt) {
-                    pageNumsHtml += '<li><a onclick="pageQuery(' + (currentPage + 1) + ')">下一页</a></li>';
-                }
-
-
-                $("#userData").html(userDataHtml);
-                $("#pageNums").html(pageNumsHtml);
-            }
+            })
         });
-    }
-
-    function deleteUser(account) {
-        var holder = null;
-        $.ajax({
-            type: "POST",
-            url : "userMaintain/doDeleteUser",
-            data:{
-                account: account
-            },
-            beforeSend: function () {
-                holder = layer.msg("处理中", {icon: 16});
-            },
-            success: function (result) {
-                layer.close(holder);
-                if (result === true) {
-                    layer.msg("删除用户成功", {time: 1000, icon: 1, shift: 5});
-                    window.location.href = "${pageContext.request.contextPath}/admin/userMaintain";
-                } else {
-                    layer.msg("删除失败，请重试", {time: 1000, icon: 5, shift: 6});
-                }
-            }
-        })
-    }
+    });
 </script>
+
 </body>
 </html>
 
