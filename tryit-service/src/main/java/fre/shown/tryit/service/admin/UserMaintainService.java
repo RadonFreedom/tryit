@@ -52,8 +52,15 @@ public interface UserMaintainService {
 
     /**
      * 根据account确认user表需要删除的<B>唯一</B>条目
-     * @param account 不能为空，否则抛出异常。可以为不存在的值
+     * @param account 需要删除的account值
      * @return 若执行出现异常则返回false
      */
     Boolean deleteUserByAccount(String account);
+
+    /**
+     * 根据account确认user表需要删除的所有条目
+     * @param accounts 包含所有需要删除的account值
+     * @return 若accounts为空，长度为0，执行出现异常则返回false
+     */
+    Boolean deleteUsers(String[] accounts);
 }

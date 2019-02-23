@@ -154,7 +154,8 @@
                                 class="glyphicon glyphicon-search"></i> 查询
                         </button>
                     </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
+                    <button id="deleteUsersButton" type="button" class="btn btn-danger"
+                            style="float:right;margin-left:10px;"><i
                             class=" glyphicon glyphicon-remove"></i> 删除
                     </button>
                     <button type="button" class="btn btn-primary" style="float:right;"
@@ -164,32 +165,34 @@
                     <br>
                     <hr style="clear:both;">
                     <div class="table-responsive">
-                        <table class="table  table-bordered">
-                            <thead>
-                            <tr>
-                                <th width="30">#</th>
-                                <th width="30">
-                                    <label>
-                                        <input type="checkbox">
-                                    </label>
-                                </th>
-                                <th>账号</th>
-                                <th>用户名</th>
-                                <th>创建时间</th>
-                                <th width="100">操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="userData">
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="6" align="center">
-                                    <ul id="pageNums" class="pagination">
-                                    </ul>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
+                        <form id="userForm">
+                            <table class="table  table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30">ID</th>
+                                    <th width="30">
+                                        <label>
+                                            <input id="selectAllBox" type="checkbox">
+                                        </label>
+                                    </th>
+                                    <th>账号</th>
+                                    <th>用户名</th>
+                                    <th>创建时间</th>
+                                    <th width="100">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="userData">
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6" align="center">
+                                        <ul id="pageNums" class="pagination">
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -225,6 +228,43 @@
     $("tbody .btn-primary").click(function () {
         window.location.href = "edit.html";
     });
+    $("#selectAllBox").click(function () {
+        var flag = this.checked;
+        $("#userData :checkbox").each(function () {
+            this.checked = flag;
+        });
+    });
+
+    $("#deleteUsersButton").click(function () {
+        var holder = null;
+        var cnt = 0;
+        $("#userData :checkbox").each(function () {
+            if (this.checked === true) {
+                cnt++;
+            }
+        });
+        if (cnt === 0) {
+            layer.msg("请选择需要删除的用户信息", {time: 1000, icon: 0, shift: 5});
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "userMaintain/doDeleteUsers",
+            data: $("#userForm").serialize(),
+            beforeSend: function () {
+                holder = layer.msg("处理中", {icon: 16});
+            },
+            success: function (result) {
+                layer.close(holder);
+                if (result === true) {
+                    layer.msg("删除用户成功", {time: 1000, icon: 1, shift: 5});
+                    pageQuery(1);
+                } else {
+                    layer.msg("删除失败，请重试", {time: 1000, icon: 5, shift: 6});
+                }
+            }
+        });
+    });
 
     function pageQuery(pageNum) {
         var holder = null;
@@ -251,15 +291,15 @@
 
                 $.each(dataList, function (i, user) {
                     userDataHtml += '<tr>';
-                    userDataHtml += '  <td>' + (i + 1) + '</td>';
-                    userDataHtml += '  <td><input type="checkbox" name="userid" value="' + user.id + '"></td>';
+                    userDataHtml += '  <td>' + user.id + '</td>';
+                    userDataHtml += '  <td><input type="checkbox" name="account" value="' + user.account + '"></td>';
                     userDataHtml += '  <td>' + user.account + '</td>';
                     userDataHtml += '  <td>' + user.name + '</td>';
                     userDataHtml += '  <td>' + user.createTime + '</td>';
                     userDataHtml += '  <td>';
                     userDataHtml += '     <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-                    userDataHtml += '     <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href=\'userMaintain/updateUser?account='+ user.account +'\'"><i class=" glyphicon glyphicon-pencil"></i></button>';
-                    userDataHtml += '	  <button type="button" class="btn btn-danger btn-xs" onclick=deleteUser("'+ user.account +'")><i class=" glyphicon glyphicon-remove"></i></button>';
+                    userDataHtml += '     <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href=\'userMaintain/updateUser?account=' + user.account + '\'"><i class=" glyphicon glyphicon-pencil"></i></button>';
+                    userDataHtml += '	  <button type="button" class="btn btn-danger btn-xs" onclick=deleteUser("' + user.account + '")><i class=" glyphicon glyphicon-remove"></i></button>';
                     userDataHtml += '  </td>';
                     userDataHtml += '</tr>';
                 });
@@ -291,8 +331,8 @@
         var holder = null;
         $.ajax({
             type: "POST",
-            url : "userMaintain/doDeleteUser",
-            data:{
+            url: "userMaintain/doDeleteUser",
+            data: {
                 account: account
             },
             beforeSend: function () {

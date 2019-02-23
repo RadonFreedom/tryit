@@ -82,5 +82,23 @@ public class UserMaintainServiceImpl implements UserMaintainService {
         }
         return true;
     }
+
+    @Override
+    public Boolean deleteUsers(String[] accounts) {
+        if (accounts == null || accounts.length == 0) {
+            return false;
+        }
+
+        try {
+            for (String account : accounts) {
+                userDAO.deleteUserByAccount(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 }
 

@@ -70,4 +70,10 @@ public class UserMaintainController {
     public Boolean doDeleteUser(String account) {
         return userMaintainService.deleteUserByAccount(account);
     }
+
+    @ResponseBody
+    @RequestMapping("/admin/userMaintain/doDeleteUsers")
+    public Boolean doDeleteUsers(String[] account) {
+        return userMaintainService.deleteUsers(account);
+    }
 }
